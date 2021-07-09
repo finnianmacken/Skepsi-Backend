@@ -34,9 +34,6 @@ SECRET_KEY = '9@7f=%7!f&af(@vwb9o!hd@h_01-vca*y83u=u7kmxw=fsc8gp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -53,10 +50,6 @@ INSTALLED_APPS = [
 
 
 # used for hosting on an actual endpoint rather than localhost (uses ngrok)
-ALLOWED_HOSTS = [
-    'd76e4f6cab5e.ngrok.io',
-    '127.0.0.1'
-]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -158,7 +151,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-ALLOWED_HOSTS = ['skepsi-app.herokuapp.com', '127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = ['skepsi-app.herokuapp.com',
+                 '127.0.0.1:8000',
+                 'localhost',
+                 'skepsi-api.herokuapp.com']
 
 
 
