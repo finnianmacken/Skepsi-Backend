@@ -14,8 +14,11 @@ from pathlib import Path
 import os
 import dotenv
 import django_heroku
+import environ
 
 
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,7 +71,7 @@ JWT_AUTH = {
     'JWT_DECODE_HANDLER':
         'auth0authorization.utils.jwt_decode_token',
     'JWT_ALGORITHM': 'RS256',
-    'JWT_AUDIENCE': 'http://127.0.0.1:8000/',
+    'JWT_AUDIENCE': env("JWT_AUDIENCE"),
     'JWT_ISSUER': 'https://skepsi.us.auth0.com/',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
