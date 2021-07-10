@@ -71,7 +71,7 @@ JWT_AUTH = {
     'JWT_DECODE_HANDLER':
         'auth0authorization.utils.jwt_decode_token',
     'JWT_ALGORITHM': 'RS256',
-    'JWT_AUDIENCE': env("JWT_AUDIENCE"),
+    'JWT_AUDIENCE': env("JWT_AUDIENCE_VARIABLE"),
     'JWT_ISSUER': 'https://skepsi.us.auth0.com/',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
