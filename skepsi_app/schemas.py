@@ -11,7 +11,10 @@ from .auth0 import delete_user
 import json
 import jwt
 import requests
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
 
 ################### JWT PARSING #############################
 
@@ -29,7 +32,7 @@ def jwt_decode_token(info):
         raise Exception('Public key not found.')
 
     issuer = 'https://{}/'.format('skepsi.us.auth0.com')
-    decoded_token = jwt.decode(token, public_key, audience='http://127.0.0.1:8000/', issuer=issuer, algorithms=['RS256'])
+    decoded_token = jwt.decode(token, public_key, audience=env("TOKEN_AUDIENCE"), issuer=issuer, algorithms=['RS256'])
     return decoded_token
 
 
