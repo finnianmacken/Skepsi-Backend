@@ -51,6 +51,17 @@ class Reference(models.Model):
         return f"{self.title} [Paper: {self.paper.title}, {self.paperOrder}]"
 
 
+class Figure(models.Model):
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name='figures')
+    image = models.ImageField(upload_to="media/")
+    name = models.CharField(max_length=2500, default="")
+    figure_number = models.IntegerField(default=1)
+    caption = models.TextField(max_length=50000, default="")
+
+    def __str__(self):
+        return self.image.name
+
+
 POSITION_CHOICES = (
     ('positive', 'positive'),
     ('negative', 'negative')

@@ -4,7 +4,7 @@ from graphene_django import DjangoObjectType
 from django.db.models import Count
 from django.utils.text import slugify
 
-from .models import User, Topic, Paper, Annotation, Reference, Score
+from .models import User, Topic, Paper, Annotation, Reference, Score, Figure
 
 from .auth0 import delete_user
 
@@ -67,6 +67,12 @@ class PaperType(DjangoObjectType):
 class ReferenceType(DjangoObjectType):
     class Meta:
         model = Reference
+        fields = "__all__"
+
+
+class FigureType(DjangoObjectType):
+    class Meta:
+        model = Figure
         fields = "__all__"
 
 class AnnotationType(DjangoObjectType):

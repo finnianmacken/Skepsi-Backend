@@ -188,3 +188,7 @@ django_heroku.settings(locals())
 #
 # options = DATABASES['default'].get('OPTIONS', {})
 # options.pop('sslmode', None)
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
