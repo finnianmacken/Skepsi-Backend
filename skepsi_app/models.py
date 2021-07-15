@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
@@ -110,7 +111,7 @@ SCORE_CHOICES = (
 
 
 class Score(models.Model):
-    score = models.CharField(
+    field = models.CharField(
         max_length=100,
         choices=SCORE_CHOICES,
         default='Validity',
@@ -118,9 +119,18 @@ class Score(models.Model):
         blank=True,
     )
     explanation = models.TextField(max_length=10000)
+    score = models.IntegerField(default=1, blank=True)
     annotation = models.ForeignKey(Annotation,
                                    on_delete=models.CASCADE,
                                    related_name='scores')
 
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(score__gte=1) & models.Q(score__lte=10),
+                name="A score is valid between 1 and 10 (inclusive)"
+            )
+        ]
+
     def __str__(self):
-        return f'{self.score} on Annotation #{self.annotation.id}'
+        return f'{self.score} for {self.field} on Annotation #{self.annotation.id}'
