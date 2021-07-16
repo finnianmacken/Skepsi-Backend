@@ -43,7 +43,7 @@ def extract_token_permissions(info):
 
 
 
-################### QUERIES #############################
+######f############# QUERIES #############################
 class UserType(DjangoObjectType):
     class Meta:
         model = User
@@ -109,14 +109,13 @@ class Query(graphene.ObjectType):
 
 
     all_annotations = graphene.List(AnnotationType)
+    
     annotations_by_author = graphene.Field(lambda: graphene.List(AnnotationType),
                                            username=graphene.String())
     annotations_by_id = graphene.Field(lambda: graphene.List(AnnotationType),
                                        id=graphene.ID())
     annotations_by_paper_id = graphene.Field(lambda: graphene.List(AnnotationType),
                                                 paper_id = graphene.ID())
-
-
 
     # TODO: need to use username here, but can't configure until the interface for
     # user manipulation is finished
