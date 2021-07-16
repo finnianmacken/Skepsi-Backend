@@ -109,7 +109,7 @@ class Query(graphene.ObjectType):
 
 
     all_annotations = graphene.List(AnnotationType)
-    
+
     annotations_by_author = graphene.Field(lambda: graphene.List(AnnotationType),
                                            username=graphene.String())
     annotations_by_id = graphene.Field(lambda: graphene.List(AnnotationType),
