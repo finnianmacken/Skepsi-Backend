@@ -16,6 +16,7 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
+
 ################### JWT PARSING #############################
 
 def jwt_decode_token(info):
@@ -44,10 +45,13 @@ def extract_token_permissions(info):
 
 
 ######f############# QUERIES #############################
+
+
 class UserType(DjangoObjectType):
     class Meta:
         model = User
         fields = '__all__'
+
 
 class TopicType(DjangoObjectType):
     class Meta:
@@ -59,10 +63,12 @@ class TopicType(DjangoObjectType):
     def resolve_paper_count(self, info):
         return self.papers.count()
 
+
 class PaperType(DjangoObjectType):
     class Meta:
         model = Paper
         fields = '__all__'
+
 
 class ReferenceType(DjangoObjectType):
     class Meta:
@@ -74,6 +80,7 @@ class FigureType(DjangoObjectType):
     class Meta:
         model = Figure
         fields = "__all__"
+
 
 class AnnotationType(DjangoObjectType):
     class Meta:
@@ -91,6 +98,8 @@ class ScoreType(DjangoObjectType):
         model = Score
         fields = "__all__"
 
+
+
 class Query(graphene.ObjectType):
     all_users = graphene.List(UserType)
     user_by_username = graphene.Field(UserType, username=graphene.String())
@@ -106,8 +115,6 @@ class Query(graphene.ObjectType):
     references_by_paper_id = graphene.Field(lambda: graphene.List(ReferenceType),
                                             paper_id = graphene.ID())
 
-
-
     all_annotations = graphene.List(AnnotationType)
 
     annotations_by_author = graphene.Field(lambda: graphene.List(AnnotationType),
@@ -115,8 +122,10 @@ class Query(graphene.ObjectType):
     annotations_by_id = graphene.Field(lambda: graphene.List(AnnotationType),
                                        id=graphene.ID())
     annotations_by_paper_id = graphene.Field(lambda: graphene.List(AnnotationType),
-                                                paper_id = graphene.ID())
+                                             paper_id=graphene.ID())
 
+    scores_by_paper_id = graphene.Field(lambda: graphene.List(ScoreType),
+                                        paper_id=graphene.ID())
     # TODO: need to use username here, but can't configure until the interface for
     # user manipulation is finished
     # def resolve_all_annotations(root, info):
@@ -166,8 +175,12 @@ class Query(graphene.ObjectType):
     def resolve_user_by_username(root, info, username):
         return User.objects.get(username=username)
 
+    def resolve_scores_by_paper_id(root, info, paper_id):
+        return Score.objects.filter(annotation__paper__pk=paper_id)
+
 
 ################### MUTATIONS #############################
+
 
 class UserInputType(graphene.InputObjectType):
     username = graphene.String()

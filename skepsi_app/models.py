@@ -21,6 +21,7 @@ class Topic(models.Model):
     def __str__(self):
         return f'{self.header}'
 
+
 class Paper(models.Model):
     title = models.CharField(max_length=2000)
     authors = models.CharField(max_length=2000)
