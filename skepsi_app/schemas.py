@@ -69,6 +69,11 @@ class PaperType(DjangoObjectType):
         model = Paper
         fields = '__all__'
 
+    annotation_count = graphene.Int()
+
+    def resolve_annotation_count(self, info):
+        return self.annotations.count()
+
 
 class ReferenceType(DjangoObjectType):
     class Meta:
