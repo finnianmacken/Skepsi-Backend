@@ -13,6 +13,8 @@ import jwt
 import requests
 import environ
 
+from django.db.models import Count
+
 env = environ.Env()
 environ.Env.read_env()
 
@@ -52,7 +54,6 @@ class UserType(DjangoObjectType):
         model = User
         fields = '__all__'
 
-
 class TopicType(DjangoObjectType):
     class Meta:
         model = Topic
@@ -60,8 +61,13 @@ class TopicType(DjangoObjectType):
 
     paper_count = graphene.Int()
 
+    annotation_count = graphene.Int()
+
     def resolve_paper_count(self, info):
         return self.papers.count()
+
+    def resolve_annotation_count(self, info):
+        return Paper.objects.filter(topic__header=self.header).aggregate(Count('annotations'))['annotations__count']
 
 
 class PaperType(DjangoObjectType):
