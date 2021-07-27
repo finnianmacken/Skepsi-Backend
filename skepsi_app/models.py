@@ -17,6 +17,11 @@ class Topic(models.Model):
     header = models.CharField(max_length=40)
     domain = models.CharField(max_length=75)
     slug = models.SlugField(max_length=100, default="")
+    description = models.TextField(max_length=10000, default="")
+    image = models.ImageField(upload_to='media/',
+                              null=True,
+                              default=None,
+                              blank=True)
 
     def __str__(self):
         return f'{self.header}'
