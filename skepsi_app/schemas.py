@@ -76,9 +76,13 @@ class PaperType(DjangoObjectType):
         fields = '__all__'
 
     annotation_count = graphene.Int()
+    reading_time = graphene.Int()
 
     def resolve_annotation_count(self, info):
         return self.annotations.count()
+
+    def resolve_reading_time(self, info):
+        return round(len(self.md)/900)
 
 
 class ReferenceType(DjangoObjectType):
