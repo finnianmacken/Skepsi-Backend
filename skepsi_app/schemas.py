@@ -281,6 +281,7 @@ class UpdateAnnotation(graphene.Mutation):
 
     def mutate(root, info, annotation_data):
         annotation = Annotation.objects.get(id=annotation_data.id)
+
         if annotation_data.quote != '':
             annotation.quote = annotation_data.quote
         if annotation_data.content != '':

@@ -35,7 +35,7 @@ class Paper(models.Model):
     citationMLA = models.TextField(max_length=2000, default="")
     citationAPA = models.TextField(max_length=2000, default="")
     citationChicago = models.TextField(max_length=2000, default="")
-    md = models.TextField(max_length=50000, default="")
+    md = models.TextField(max_length=500000, default="")
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
                               related_name='papers', default="")
 
