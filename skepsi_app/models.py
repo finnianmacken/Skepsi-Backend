@@ -116,6 +116,12 @@ SCORE_CHOICES = (
 )
 
 
+class ScoreChoices(models.TextChoices):
+    VALIDITY = "Validity"
+    NOVELTY = "Novelty"
+    DOMAIN_IMPORTANCE = "Domain Importance"
+
+
 class Score(models.Model):
     field = models.CharField(
         max_length=100,
@@ -125,7 +131,7 @@ class Score(models.Model):
         blank=True,
     )
     explanation = models.TextField(max_length=10000)
-    score = models.IntegerField(default=1, blank=True)
+    scoreNumber = models.IntegerField(default=1, blank=True, null=False)
     annotation = models.ForeignKey(Annotation,
                                    on_delete=models.CASCADE,
                                    related_name='scores')
@@ -133,10 +139,10 @@ class Score(models.Model):
     class Meta:
         constraints = [
             models.CheckConstraint(
-                check=models.Q(score__gte=1) & models.Q(score__lte=10),
+                check=models.Q(scoreNumber__gte=1) & models.Q(scoreNumber__lte=10),
                 name="A score is valid between 1 and 10 (inclusive)"
             )
         ]
 
     def __str__(self):
-        return f'{self.score} for {self.field} on Annotation #{self.annotation.id}'
+        return f'{self.scoreNumber} for {self.field} on Annotation #{self.annotation.id}'

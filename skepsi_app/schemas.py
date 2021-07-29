@@ -4,7 +4,7 @@ from graphene_django import DjangoObjectType
 from django.db.models import Count
 from django.utils.text import slugify
 
-from .models import User, Topic, Paper, Annotation, Reference, Score, Figure
+from .models import User, Topic, Paper, Annotation, Reference, Score, ScoreChoices, Figure
 
 from .auth0 import delete_user
 
@@ -17,7 +17,6 @@ from django.db.models import Count
 
 env = environ.Env()
 environ.Env.read_env()
-
 
 ################### JWT PARSING #############################
 
@@ -112,7 +111,6 @@ class ScoreType(DjangoObjectType):
     class Meta:
         model = Score
         fields = "__all__"
-
 
 
 class Query(graphene.ObjectType):
@@ -318,19 +316,38 @@ class SoftDeleteAnnotation(graphene.Mutation):
 class CreateScore(graphene.Mutation):
     class Arguments:
         annotation_id = graphene.ID(required=True)
-        score = graphene.String(required=True)
+        scoreNumber = graphene.Int(required=True)
         explanation = graphene.String()
 
     score = graphene.Field(ScoreType)
 
-    def mutate(root, info, annotation_id, score, explanation):
+    def mutate(root, info, annotation_id, scoreNumber, explanation):
         score = Score(
-            score=score,
+            scoreNumber=scoreNumber,
             annotation=Annotation.objects.get(id=annotation_id),
             explanation=explanation
         )
         score.save()
         return CreateScore(score=score)
+
+
+class UpdateScore(graphene.Mutation):
+    class Arguments:
+        scoreId = graphene.ID(required=True)
+        explanation = graphene.String()
+        scoreNumber = graphene.Int()
+        field = graphene.String()
+
+    score = graphene.Field(ScoreType)
+
+    def mutate(root, info, scoreId, explanation, scoreNumber, field):
+        print("THIS IS INFO:", scoreId, explanation, scoreNumber, field)
+        score = Score.objects.get(pk=scoreId)
+        score.explanation = explanation
+        score.scoreNumber = scoreNumber
+        score.field = field
+        score.save()
+        return UpdateScore(score=score)
 
 
 class CheckUserExists(graphene.Mutation):
@@ -365,6 +382,7 @@ class Mutations(graphene.ObjectType):
     delete_annotation = DeleteAnnotation.Field()
     soft_delete_annotation = SoftDeleteAnnotation.Field()
     create_score = CreateScore.Field()
+    update_score = UpdateScore.Field()
     create_user = CreateUser.Field()
     update_user = UpdateUser.Field()
     check_user_exists = CheckUserExists.Field()
