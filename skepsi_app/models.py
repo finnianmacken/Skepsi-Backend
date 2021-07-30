@@ -106,7 +106,7 @@ class Annotation(models.Model):
         return children_list
 
     def __str__(self):
-        return f'{self.quote} [{self.author.username}, ID: {self.id}], [Paper: {self.paper}]'
+        return f'{self.content} [{self.author.username}, ID: {self.id}], [Paper: {self.paper}]'
 
 
 SCORE_CHOICES = (
@@ -145,4 +145,4 @@ class Score(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.scoreNumber} for {self.field} on Annotation #{self.annotation.id}'
+        return f'{self.scoreNumber} for {self.field} on Annotation #{self.annotation.id} [id: {self.id}]'

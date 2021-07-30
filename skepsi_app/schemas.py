@@ -260,13 +260,18 @@ class CreateAnnotation(graphene.Mutation):
     class Arguments:
         author = graphene.String(required=True)
         content = graphene.String(required=True)
+        quote = graphene.String()
+        paperId = graphene.ID(required=True)
 
     annotation = graphene.Field(AnnotationType)
 
-    def mutate(root, info, author, content):
+    def mutate(root, info, author, content, quote, paperId):
         annotation = Annotation(
+            paper=Paper.objects.get(pk=paperId),
             author=User.objects.get(username=author),
-            content=content)
+            content=content,
+            quote=quote
+            )
         annotation.save()
         return CreateAnnotation(annotation=annotation)
 
@@ -290,12 +295,12 @@ class UpdateAnnotation(graphene.Mutation):
 
 class DeleteAnnotation(graphene.Mutation):
     class Arguments:
-        id = graphene.ID(required=True)
+        annotationId = graphene.ID(required=True)
 
     annotation = graphene.Field(AnnotationType)
 
-    def mutate(root, info, id):
-        annotation = Annotation.objects.get(id=id)
+    def mutate(root, info, annotationId):
+        annotation = Annotation.objects.get(id=annotationId)
         annotation.delete()
         return DeleteAnnotation(annotation=annotation)
 
@@ -318,14 +323,16 @@ class CreateScore(graphene.Mutation):
         annotation_id = graphene.ID(required=True)
         scoreNumber = graphene.Int(required=True)
         explanation = graphene.String()
+        field = graphene.String()
 
     score = graphene.Field(ScoreType)
 
-    def mutate(root, info, annotation_id, scoreNumber, explanation):
+    def mutate(root, info, annotation_id, scoreNumber, explanation, field):
         score = Score(
             scoreNumber=scoreNumber,
             annotation=Annotation.objects.get(id=annotation_id),
-            explanation=explanation
+            explanation=explanation,
+            field=field
         )
         score.save()
         return CreateScore(score=score)
@@ -348,6 +355,17 @@ class UpdateScore(graphene.Mutation):
         score.field = field
         score.save()
         return UpdateScore(score=score)
+
+class DeleteScore(graphene.Mutation):
+    class Arguments:
+        scoreId = graphene.ID(required=True)
+
+    score = graphene.Field(ScoreType)
+
+    def mutate(root, info, scoreId):
+        score = Score.objects.get(pk=scoreId)
+        score.delete()
+        return DeleteScore(score=score)
 
 
 class CheckUserExists(graphene.Mutation):
@@ -383,6 +401,7 @@ class Mutations(graphene.ObjectType):
     soft_delete_annotation = SoftDeleteAnnotation.Field()
     create_score = CreateScore.Field()
     update_score = UpdateScore.Field()
+    delete_score = DeleteScore.Field()
     create_user = CreateUser.Field()
     update_user = UpdateUser.Field()
     check_user_exists = CheckUserExists.Field()
