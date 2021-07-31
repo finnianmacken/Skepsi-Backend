@@ -5,7 +5,7 @@ from django.db.models import Count
 from django.utils.text import slugify
 
 from .models import User, Topic, Paper, Annotation, Reference, Score, ScoreChoices, Figure
-from .algorithms.zero_shot_classification import classify_topics_queue_manager
+# from .algorithms.zero_shot_classification import classify_topics_queue_manager
 
 from .auth0 import delete_user
 
@@ -274,7 +274,7 @@ class CreateAnnotation(graphene.Mutation):
             quote=quote,
             )
         annotation.save()
-        annotation.ai_data = classify_topics_queue_manager(content, annotation.id)
+        # annotation.ai_data = classify_topics_queue_manager(content, annotation.id)
         return CreateAnnotation(annotation=annotation)
 
 
