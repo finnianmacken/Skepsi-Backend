@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'skepsi_app',
     'graphene_django',
     'corsheaders',
-    'rest_framework']
+    'rest_framework',
+    'background_task'
+    ]
 
 
 # used for hosting on an actual endpoint rather than localhost (uses ngrok)
