@@ -74,6 +74,7 @@ POSITION_CHOICES = (
     ('negative', 'negative')
 )
 
+
 class Annotation(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='annotations')
@@ -90,10 +91,6 @@ class Annotation(models.Model):
                                blank=True,
                                on_delete=models.CASCADE,
                                related_name='children')
-    ai_data = models.TextField(max_length=50000,
-                               null=True,
-                               blank=True,
-                               default="")
     position = models.CharField(
         max_length=20,
         choices=POSITION_CHOICES,
