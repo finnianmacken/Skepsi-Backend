@@ -273,15 +273,19 @@ class CreateAnnotation(graphene.Mutation):
         content = graphene.String(required=True)
         quote = graphene.String()
         paperId = graphene.ID(required=True)
+        start = graphene.Int()
+        stop = graphene.Int()
 
     annotation = graphene.Field(AnnotationType)
 
-    def mutate(root, info, author, content, quote, paperId):
+    def mutate(root, info, author, content, quote, paperId, start, stop):
         annotation = Annotation(
             paper=Paper.objects.get(pk=paperId),
             author=User.objects.get(username=author),
             content=content,
-            quote=quote
+            quote=quote,
+            start=start,
+            stop=stop
             )
         annotation.save()
         classify_topics_queue_manager.delay(content, annotation.id)
