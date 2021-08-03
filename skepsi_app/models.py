@@ -10,7 +10,7 @@ class Profile(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='profile')
     orcid = models.CharField(max_length=30, default='', blank=True)
-    domains = models.TextField(max_length=200, default="")
+    domains = models.TextField(max_length=200, default="", null=True, blank=True)
 
 
 class Topic(models.Model):
