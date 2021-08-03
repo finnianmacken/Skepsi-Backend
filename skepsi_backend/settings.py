@@ -192,3 +192,11 @@ django_heroku.settings(locals())
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+BROKER_URL = 'amqp://finn:finn@localhost:5672/myvhost'
+CELERY_RESULT_BACKEND = 'rpc://'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 86400}
+CELERY_RESULT_PERSISTENT = True
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ENABLE_UTC = True

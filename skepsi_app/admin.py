@@ -43,6 +43,7 @@ class AnnotationAdmin(admin.ModelAdmin):
 admin.site.register(Reference)
 admin.site.register(Score)
 admin.site.register(Figure)
+admin.site.register(Profile)
 admin.site.register(Annotation, AnnotationAdmin)
 admin.site.register(Paper, PaperAdmin)
 admin.site.register(Topic, TopicAdmin)

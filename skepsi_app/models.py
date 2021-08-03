@@ -4,13 +4,13 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
-
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    isUser = models.BooleanField(default=False)
-    isScientist = models.BooleanField(default=False)
-    isDomainExpert = models.BooleanField(default=False)
-    orcid = models.CharField(max_length=30, default='')
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User,
+                                on_delete=models.CASCADE,
+                                related_name='profile')
+    orcid = models.CharField(max_length=30, default='', blank=True)
+    domains = models.TextField(max_length=200, default="")
 
 
 class Topic(models.Model):
@@ -78,7 +78,6 @@ POSITION_CHOICES = (
 class Annotation(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='annotations')
-
     quote = models.TextField(blank=True)
     content = models.TextField(blank=True)
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE,
@@ -96,6 +95,7 @@ class Annotation(models.Model):
         choices=POSITION_CHOICES,
         default='positive'
     )
+    ai_data = models.TextField(max_length=50000, blank=True, default="")
     start = models.IntegerField(blank=True, default=0)
     stop = models.IntegerField(blank=True, default=0)
 

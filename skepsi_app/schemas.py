@@ -4,9 +4,11 @@ from graphene_django import DjangoObjectType
 from django.db.models import Count
 from django.utils.text import slugify
 
-from .models import User, Topic, Paper, Annotation, Reference, Score, ScoreChoices, Figure
+from .models import User, Topic, Paper, Annotation, Reference, Score, ScoreChoices, Figure, Profile
 
 from .auth0 import delete_user
+
+from .tasks import classify_topics_queue_manager
 
 import json
 import jwt
@@ -52,6 +54,11 @@ class UserType(DjangoObjectType):
     class Meta:
         model = User
         fields = '__all__'
+
+class ProfileType(DjangoObjectType):
+    class Meta:
+        model = Profile
+        fields = "__all__"
 
 class TopicType(DjangoObjectType):
     class Meta:
@@ -115,6 +122,7 @@ class ScoreType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     all_users = graphene.List(UserType)
+
     user_by_username = graphene.Field(UserType, username=graphene.String())
 
     all_topics = graphene.List(TopicType)
@@ -199,6 +207,7 @@ class UserInputType(graphene.InputObjectType):
     username = graphene.String()
     password = graphene.String()
     email = graphene.String(required=True)
+    domains = graphene.String()
 
 
 class AnnotationInput(graphene.InputObjectType):
@@ -221,6 +230,8 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(user_data.password)
         user.save()
+        profile = Profile(user=user, domains=user_data.domains)
+        profile.save()
         return CreateUser(user=user)
 
 
@@ -273,6 +284,7 @@ class CreateAnnotation(graphene.Mutation):
             quote=quote
             )
         annotation.save()
+        classify_topics_queue_manager.delay(content, annotation.id)
         return CreateAnnotation(annotation=annotation)
 
 
