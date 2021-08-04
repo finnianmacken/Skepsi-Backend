@@ -66,8 +66,8 @@ class TopicType(DjangoObjectType):
         fields = '__all__'
 
     paper_count = graphene.Int()
-
     annotation_count = graphene.Int()
+    scientist_count = graphene.Int()
 
     def resolve_paper_count(self, info):
         return self.papers.count()
@@ -75,6 +75,18 @@ class TopicType(DjangoObjectType):
     def resolve_annotation_count(self, info):
         return Paper.objects.filter(topic__header=self.header).aggregate(Count('annotations'))['annotations__count']
 
+    def resolve_scientist_count(self, info):
+        sum = 0
+        paper_qs = Paper.objects.filter(topic__pk=self.id)
+        for paper in paper_qs:
+            scientist_set = set()
+            annotation_qs = Annotation.objects.filter(paper__pk=paper.id)
+            for annotation in annotation_qs:
+                user_qs = User.objects.filter(annotations__pk=annotation.id)
+                for user in user_qs:
+                    scientist_set.add(user.username)
+            sum += len(scientist_set)
+        return sum
 
 class PaperType(DjangoObjectType):
     class Meta:
@@ -83,12 +95,22 @@ class PaperType(DjangoObjectType):
 
     annotation_count = graphene.Int()
     reading_time = graphene.Int()
+    scientist_count = graphene.Int()
 
     def resolve_annotation_count(self, info):
         return self.annotations.count()
 
     def resolve_reading_time(self, info):
         return round(len(self.md)/900)
+
+    def resolve_scientist_count(self, info):
+        scientist_set = set()
+        annotation_qs = Annotation.objects.filter(paper__pk=self.id)
+        for annotation in annotation_qs:
+            user_qs = User.objects.filter(annotations__pk=annotation.id)
+            for user in user_qs:
+                scientist_set.add(user.username)
+        return len(scientist_set)
 
 
 class ReferenceType(DjangoObjectType):
