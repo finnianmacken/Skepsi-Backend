@@ -31,6 +31,8 @@ class Paper(models.Model):
     title = models.CharField(max_length=2000)
     authors = models.CharField(max_length=2000)
     abstract = models.TextField(max_length=10000, default="")
+    journal = models.CharField(max_length=2000, default="")
+    doi = models.CharField(max_length=2000, default="")
     created_date = models.CharField(max_length=500, default="")
     citationMLA = models.TextField(max_length=2000, default="")
     citationAPA = models.TextField(max_length=2000, default="")
@@ -130,7 +132,7 @@ class Score(models.Model):
         null=True,
         blank=True,
     )
-    explanation = models.TextField(max_length=10000)
+    explanation = models.TextField(max_length=10000, null=True, blank=True)
     scoreNumber = models.IntegerField(default=1, blank=True, null=False)
     annotation = models.ForeignKey(Annotation,
                                    on_delete=models.CASCADE,
