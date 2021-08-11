@@ -310,7 +310,7 @@ class CreateAnnotation(graphene.Mutation):
             stop=stop
             )
         annotation.save()
-        classify_topics_queue_manager.delay(content, annotation.id)
+        # classify_topics_queue_manager.delay(content, annotation.id)
         return CreateAnnotation(annotation=annotation)
 
 
