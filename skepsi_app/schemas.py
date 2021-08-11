@@ -297,10 +297,11 @@ class CreateAnnotation(graphene.Mutation):
         paperId = graphene.ID(required=True)
         start = graphene.Int()
         stop = graphene.Int()
+        parentId = graphene.ID()
 
     annotation = graphene.Field(AnnotationType)
 
-    def mutate(root, info, author, content, quote, paperId, start, stop):
+    def mutate(root, info, author, content, quote, paperId, start, stop, parentId):
         annotation = Annotation(
             paper=Paper.objects.get(pk=paperId),
             author=User.objects.get(username=author),
@@ -309,6 +310,9 @@ class CreateAnnotation(graphene.Mutation):
             start=start,
             stop=stop
             )
+        print("PARENT ID", parentId)
+        if(parentId):
+            annotation.parent = Annotation.objects.get(pk=parentId)
         annotation.save()
         # classify_topics_queue_manager.delay(content, annotation.id)
         return CreateAnnotation(annotation=annotation)
