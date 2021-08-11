@@ -436,6 +436,16 @@ class CheckEmailExists(graphene.Mutation):
         return CheckEmailExists(exists=True)
 
 
+class PlaceholderMutation(graphene.Mutation):
+    class Arguments:
+        placeholder_field = graphene.String()
+
+    score = graphene.Field(ScoreType)
+
+    def mutate(root, info, placeholder_field):
+        pass
+
+
 class Mutations(graphene.ObjectType):
     create_annotation = CreateAnnotation.Field()
     update_annotation = UpdateAnnotation.Field()
@@ -449,6 +459,6 @@ class Mutations(graphene.ObjectType):
     check_user_exists = CheckUserExists.Field()
     check_email_exists = CheckEmailExists.Field()
     delete_user = DeleteUser.Field()
-
+    placeholder_mutation = PlaceholderMutation.Field()
 
 schema = graphene.Schema(query=Query, mutation=Mutations)
