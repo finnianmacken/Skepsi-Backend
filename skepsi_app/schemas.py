@@ -310,11 +310,10 @@ class CreateAnnotation(graphene.Mutation):
             start=start,
             stop=stop
             )
-        print("PARENT ID", parentId)
-        if(parentId):
+        # print("PARENT ID", parentId)
+        if(parentId != "-1"):
             annotation.parent = Annotation.objects.get(pk=parentId)
         annotation.save()
-        # classify_topics_queue_manager.delay(content, annotation.id)
         return CreateAnnotation(annotation=annotation)
 
 
