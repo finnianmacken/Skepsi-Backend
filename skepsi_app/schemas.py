@@ -8,7 +8,7 @@ from .models import User, Topic, Paper, Annotation, Reference, Score, ScoreChoic
 
 from .auth0 import delete_user
 
-from .tasks import classify_topics_queue_manager
+# from .tasks import classify_topics_queue_manager
 
 import json
 import jwt
