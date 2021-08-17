@@ -15,7 +15,6 @@ cachetools==4.2.2
 CacheControl==0.12.6
 cachy==0.3.0
 celery==5.1.2
-certifi==2021.5.30t
 cffi==1.14.5
 chardet==4.0.0
 cleo==0.8.1
