@@ -162,7 +162,7 @@ class Query(graphene.ObjectType):
 
     annotations_by_author = graphene.Field(lambda: graphene.List(AnnotationType),
                                            username=graphene.String())
-    
+
     annotations_by_id = graphene.Field(lambda: graphene.List(AnnotationType),
                                        id=graphene.ID())
     annotations_by_paper_id = graphene.Field(lambda: graphene.List(AnnotationType),
