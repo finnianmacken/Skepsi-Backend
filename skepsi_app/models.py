@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+import os
 
 # Create your models here.
 
@@ -68,7 +69,21 @@ class Figure(models.Model):
     caption = models.TextField(max_length=50000, default="")
 
     def __str__(self):
-        return self.image.name
+        return f'{self.image.name}[{self.paper.title}]'
+
+
+def get_upload_path(instance, filename):
+    return 'media/papermedia/tables/{0}/{1}'.format(instance.paper.id, filename)
+
+class Table(models.Model):
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name='tables')
+    image = models.ImageField(upload_to=get_upload_path)
+    name = models.CharField(max_length=2500, default="")
+    table_number = models.IntegerField(default=1)
+    caption = models.TextField(max_length=50000, default="", blank=True)
+
+    def __str__(self):
+        return f'{self.image.name} [ Paper Id: {self.paper.id}]'
 
 
 POSITION_CHOICES = (

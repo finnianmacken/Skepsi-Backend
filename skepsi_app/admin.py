@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Annotation, Paper, User, Profile, Topic, Reference, Score, Figure
+from .models import Annotation, Paper, User, Profile, Topic, Reference, Score, Figure, Table
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # Adds information from the Profile model to the User model in the admin
@@ -41,6 +41,7 @@ class AnnotationAdmin(admin.ModelAdmin):
     inlines = [ScoreInlineAdmin, ]
 
 admin.site.register(Reference)
+admin.site.register(Table)
 admin.site.register(Score)
 admin.site.register(Figure)
 admin.site.register(Profile)
