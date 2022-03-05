@@ -16,6 +16,14 @@ import dotenv
 import django_heroku
 import environ
 
+import django
+from django.utils.encoding import force_str
+
+# Dealing with outdated graphql use of force_text
+django.utils.encoding.force_text = force_str
+
+
+
 
 env = environ.Env()
 environ.Env.read_env()
