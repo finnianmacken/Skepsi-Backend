@@ -19,18 +19,15 @@ import environ
 import django
 from django.utils.encoding import force_str
 
+
 # Dealing with outdated graphql use of force_text
 django.utils.encoding.force_text = force_str
-
-
-
 
 env = environ.Env()
 environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 #
 # dotenv_file = os.path.join(BASE_DIR, ".env")
 # if os.path.isfile(dotenv_file):
@@ -45,8 +42,9 @@ SECRET_KEY = '9@7f=%7!f&af(@vwb9o!hd@h_01-vca*y83u=u7kmxw=fsc8gp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Application definition
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -187,20 +185,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# HEROKU CONFIGURATIONS
 
-import dj_database_url
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-
-django_heroku.settings(locals())
-#
-# options = DATABASES['default'].get('OPTIONS', {})
-# options.pop('sslmode', None)
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# CELERY
 BROKER_URL = 'amqp://finn:finn@localhost:5672/myvhost'
 CELERY_RESULT_BACKEND = 'rpc://'
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 86400}
@@ -208,3 +199,6 @@ CELERY_RESULT_PERSISTENT = True
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ENABLE_UTC = True
+
+# HEROKU CONFIGURATIONS
+django_heroku.settings(locals())
